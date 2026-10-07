@@ -1,0 +1,69 @@
+<phyphox locale="zh" version="1.19">
+  <title>电梯中的力与加速度</title>
+  <category>Phyerma</category>
+  <description>手机固定在支架上拍摄电子秤示数，同时记录加速度三轴数据。录像与传感器按同一时间轴对齐，慢放视频即可逐帧读出秤示数 mₐ 并对照加速度 aₐ，验证 F=ma（超重与失重）。注意：验证用的是"含 g"的加速度读数（静止约 9.8 m/s²），取竖直分量算 a=aₐ−g。</description>
+  <icon>phyphox</icon>
+  <data-containers>
+    <container size="0">videoT</container>
+    <container size="0">accX</container>
+    <container size="0">accY</container>
+    <container size="0">accZ</container>
+    <container size="0">acc</container>
+    <container size="0">acc_time</container>
+  </data-containers>
+  <input>
+    <sensor type="accelerometer">
+      <output component="x">accX</output>
+      <output component="y">accY</output>
+      <output component="z">accZ</output>
+      <output component="abs">acc</output>
+      <output component="t">acc_time</output>
+    </sensor>
+    <video resolution="720" fps="30" audio="true">
+      <output component="t">videoT</output>
+    </video>
+  </input>
+  <output>
+  </output>
+  <views>
+    <view label="录制">
+      <camera-gui label="对准电子秤示数"/>
+      <value label="加速度大小 (m/s²)" precision="2" size="2">
+        <input>acc</input>
+      </value>
+      <info label="说明" info="先把手机固定在支架上对准秤面示数；开始测量后进电梯按楼层。运行中不要移动手机。"/>
+    </view>
+    <view label="加速度">
+      <graph label="加速度 x" timeOnX="true" labelX="t" unitX="s" labelY="a" unitY="m/s²" partialUpdate="true" color="green">
+        <input axis="x">acc_time</input>
+        <input axis="y">accX</input>
+      </graph>
+      <graph label="加速度 y" timeOnX="true" labelX="t" unitX="s" labelY="a" unitY="m/s²" partialUpdate="true" color="blue">
+        <input axis="x">acc_time</input>
+        <input axis="y">accY</input>
+      </graph>
+      <graph label="加速度 z" timeOnX="true" labelX="t" unitX="s" labelY="a" unitY="m/s²" partialUpdate="true" color="yellow">
+        <input axis="x">acc_time</input>
+        <input axis="y">accZ</input>
+      </graph>
+      <graph label="加速度模长" timeOnX="true" labelX="t" unitX="s" labelY="|a|" unitY="m/s²" partialUpdate="true" color="white">
+        <input axis="x">acc_time</input>
+        <input axis="y">acc</input>
+      </graph>
+    </view>
+  </views>
+  <analysis>
+  </analysis>
+  <export>
+    <set name="加速度">
+      <data name="Time (s)">acc_time</data>
+      <data name="Acceleration x (m/s²)">accX</data>
+      <data name="Acceleration y (m/s²)">accY</data>
+      <data name="Acceleration z (m/s²)">accZ</data>
+      <data name="Absolute acceleration (m/s²)">acc</data>
+    </set>
+    <set name="视频帧时间">
+      <data name="Time (s)">videoT</data>
+    </set>
+  </export>
+</phyphox>
